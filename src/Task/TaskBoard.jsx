@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SearchTask from "./SearchTask";
 import TaskActions from "./TaskActions";
 import TaskList from "./TaskList";
+import AddTaskModal from "./AddTaskModal";
 
 const TaskBoard = () => {
   const defaultTask = {
@@ -15,13 +16,22 @@ const TaskBoard = () => {
   };
 
   const [tasks, setTasks] = useState([defaultTask]);
+  const [showAddModal, setShowAddModal] = useState(false);
 
-const handleAddTask = () => {
-  console.log("Hello");
-}
+  const handleAddTask = (newTask) => {
+    setTasks([...tasks, newTask]);
+    setShowAddModal(false);
+  };
 
   return (
     <section className="mb-20" id="tasks">
+      {showAddModal && (
+        <AddTaskModal
+          onSave={handleAddTask}
+          onClose={() => setShowAddModal(false)}
+        />
+      )}
+
       <div className="container">
         <div className="p-2">
           <SearchTask />
@@ -29,7 +39,7 @@ const handleAddTask = () => {
 
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
           {/* Task Actions: Add/Delete buttons */}
-          <TaskActions onAddClick={handleAddTask}/>
+          <TaskActions onAddClick={() => setShowAddModal(true)} />
 
           {/* Task List */}
           <TaskList tasks={tasks} />
